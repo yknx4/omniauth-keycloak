@@ -10,6 +10,7 @@ module OmniAuth
             attr_reader :cert
 
             def setup_phase
+                puts options.inspect
                 if @authorize_url.nil? || @token_url.nil?
                     realm = options.client_options[:realm].nil? ? options.client_id : options.client_options[:realm]
                     site = options.client_options[:site]
