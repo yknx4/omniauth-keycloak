@@ -9,6 +9,15 @@ module OmniAuth
             attr_reader :token_url
             attr_reader :cert
 
+            def request_phase
+                url = client.auth_code.authorize_url({:redirect_uri => callback_url.gsub(/\?.+\Z/, "")}.merge(authorize_params))
+                req = Rack::Request.new(env)
+                if req.params['register'] == 'true'
+                    url = url.gsub('openid-connect/auth', 'openid-connect/registrations')
+                end
+                redirect url
+            end
+
             def setup_phase
                 if @authorize_url.nil? || @token_url.nil?
                     realm = options.client_options[:realm].nil? ? options.client_id : options.client_options[:realm]
